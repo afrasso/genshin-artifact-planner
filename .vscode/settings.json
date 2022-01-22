@@ -10,5 +10,5 @@
     "**/coverage": true,
     "*.log": true
   },
-  "files.eol": "\r\n"
+  "files.eol": "\n"
 }

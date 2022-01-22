@@ -1,4 +1,3 @@
-import "semantic-ui-css/semantic.css";
 import Character from "./Character.tsx";
 
 function App() {

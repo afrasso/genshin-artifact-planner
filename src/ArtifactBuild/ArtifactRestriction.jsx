@@ -1,10 +1,12 @@
 import React from "react";
-import { Autocomplete, Grid, TextField } from "@mui/material";
+import PropTypes from "prop-types";
+import { Autocomplete, Grid, IconButton, TextField } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 class ArtifactRestriction extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { artifactSets: [] };
+    this.state = { substatRestrictions: [] };
   }
 
   render() {
@@ -20,9 +22,21 @@ class ArtifactRestriction extends React.Component {
           options={["HP", "ATK", "HP%", "ATK%", "DEF%"]}
           renderInput={(params) => <TextField {...params} label="Main Stat" />}
         />
+        <Grid container justifyContent="flex-end">
+          <IconButton onClick={() => this.props.onRemove(this.props.id)}>
+            <CloseIcon />
+          </IconButton>
+        </Grid>
       </Grid>
     );
   }
 }
+
+ArtifactRestriction.propTypes = {
+  id: PropTypes.string,
+  onRemove: PropTypes.func,
+  mainStat: PropTypes.string,
+  type: PropTypes.string,
+};
 
 export default ArtifactRestriction;

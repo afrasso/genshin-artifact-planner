@@ -15,7 +15,6 @@ class ArtifactBuilds extends React.Component {
   addBuild() {
     const builds = this.state.builds.concat([{ id: uuid() }]);
     this.setState({ builds });
-    this.reportChange();
   }
 
   render() {

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
 
-import React from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 
@@ -9,61 +9,53 @@ import CharacterSelect from "./CharacterSelect";
 import ArtifactSetRestrictions from "./ArtifactSetRestrictions";
 import ArtifactRestrictions from "./ArtifactRestrictions";
 
-class ArtifactBuild extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      character: props.build.character,
-      restrictions: _.isNil(props.build.restrictions)
-        ? []
-        : props.build.restrictions,
-      setRestrictions: _.isNil(props.build.setRestrictions)
-        ? []
-        : props.build.setRestrictions,
-    };
-  }
+function ArtifactBuild(props) {
+  const [character, setCharacter] = useState(props.build.character);
+  const [restrictions, setRestrictionsFn] = useState(
+    _.isNil(props.build.restrictions) ? [] : props.build.restrictions
+  );
+  const [setRestrictions, setSetRestrictionsFn] = useState(
+    _.isNil(props.build.setRestrictions) ? [] : props.build.setRestrictions
+  );
 
-  addSetRestriction() {
-    const setRestrictions = this.state.setRestrictions.concat([
+  function addSetRestriction() {
+    const updatedSetRestrictions = setRestrictions.concat([
       { id: uuid(), is4Piece: true },
     ]);
-    this.updateIs4PieceDisabled(setRestrictions);
-    this.setState({ setRestrictions });
+    updateIs4PieceDisabled(updatedSetRestrictions);
+    setSetRestrictionsFn(updatedSetRestrictions);
   }
 
-  addRestriction() {
-    const restrictions = this.state.restrictions.concat([{ id: uuid() }]);
-    this.setState({ restrictions });
+  function addRestriction() {
+    setRestrictionsFn(restrictions.concat([{ id: uuid() }]));
   }
 
-  onRemove(id) {
-    const restrictions = _.filter(
-      this.state.restrictions,
-      (restriction) => restriction.id !== id
+  function onRemove(id) {
+    setRestrictionsFn(
+      _.filter(restrictions, (restriction) => restriction.id !== id)
     );
-    this.setState({ restrictions });
   }
 
-  onSetIs4PieceChange(id, is4Piece) {
+  function onSetIs4PieceChange(id, is4Piece) {
     const setRestriction = _.find(
-      this.state.setRestrictions,
+      setRestrictions,
       (restriction) => restriction.id === id
     );
     setRestriction.is4Piece = is4Piece;
-    this.updateIs4PieceDisabled(this.state.setRestrictions);
-    this.setState({ restrictions: this.state.setRestrictions });
+    updateIs4PieceDisabled(setRestrictions);
+    setSetRestrictionsFn(setRestrictions);
   }
 
-  onSetRemove(restrictionId) {
-    const setRestrictions = _.filter(
-      this.state.setRestrictions,
+  function onSetRemove(restrictionId) {
+    const updatedSetRestrictions = _.filter(
+      setRestrictions,
       (restriction) => restriction.id !== restrictionId
     );
-    this.updateIs4PieceDisabled(setRestrictions);
-    this.setState({ setRestrictions });
+    updateIs4PieceDisabled(updatedSetRestrictions);
+    setSetRestrictionsFn(updatedSetRestrictions);
   }
 
-  updateIs4PieceDisabled(restrictions) {
+  function updateIs4PieceDisabled(restrictions) {
     const is4PieceDisabled = restrictions.length === 2;
     _.forEach(restrictions, (restriction) => {
       if (is4PieceDisabled) {
@@ -73,16 +65,16 @@ class ArtifactBuild extends React.Component {
     });
   }
 
-  isValid() {
-    if (_.isNil(this.state.character)) {
+  function isValid() {
+    if (_.isNil(character)) {
       return false;
     }
-    _.forEach(this.state.setRestrictions, (setRestriction) => {
+    _.forEach(setRestrictions, (setRestriction) => {
       if (_.isNil(setRestriction.set)) {
         return false;
       }
     });
-    _.forEach(this.state.restrictions, (restriction) => {
+    _.forEach(restrictions, (restriction) => {
       if (_.isNil(restriction.type) || _.isNil(restriction.mainStat)) {
         return false;
       }
@@ -90,32 +82,28 @@ class ArtifactBuild extends React.Component {
     return true;
   }
 
-  render() {
-    return (
-      <Grid container>
-        <Grid item xs={12}>
-          <CharacterSelect
-            onChange={(e, option) => this.setState({ character: option })}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <ArtifactSetRestrictions
-            addRestriction={this.addSetRestriction.bind(this)}
-            onIs4PieceChange={this.onSetIs4PieceChange.bind(this)}
-            onRemove={this.onSetRemove.bind(this)}
-            restrictions={this.state.setRestrictions}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <ArtifactRestrictions
-            addRestriction={this.addRestriction.bind(this)}
-            onRemove={this.onRemove.bind(this)}
-            restrictions={this.state.restrictions}
-          />
-        </Grid>
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <CharacterSelect onChange={(e, option) => setCharacter(option)} />
       </Grid>
-    );
-  }
+      <Grid item xs={12}>
+        <ArtifactSetRestrictions
+          addRestriction={addSetRestriction}
+          onIs4PieceChange={onSetIs4PieceChange}
+          onRemove={onSetRemove}
+          restrictions={setRestrictions}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <ArtifactRestrictions
+          addRestriction={addRestriction}
+          onRemove={onRemove}
+          restrictions={restrictions}
+        />
+      </Grid>
+    </Grid>
+  );
 }
 
 ArtifactBuild.propTypes = {

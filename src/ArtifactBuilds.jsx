@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 
 import React from "react";
-import PropTypes from "prop-types";
 import { Button, Grid } from "@mui/material";
 
 import ArtifactBuild from "./ArtifactBuild/ArtifactBuild";
@@ -19,18 +18,6 @@ class ArtifactBuilds extends React.Component {
     this.reportChange();
   }
 
-  onChange(changedBuild) {
-    const builds = this.state.builds;
-    builds[_.findIndex(builds, (build) => build.id === changedBuild.id)] =
-      changedBuild;
-    this.setState({ builds });
-    this.reportChange();
-  }
-
-  reportChange() {
-    return this.props.onChange(this.state.builds);
-  }
-
   render() {
     return (
       <Grid container>
@@ -39,10 +26,7 @@ class ArtifactBuilds extends React.Component {
             {_.map(this.state.builds, (build) => {
               return (
                 <Grid item key={build.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <ArtifactBuild
-                    build={build}
-                    onChange={this.onChange.bind(this)}
-                  />
+                  <ArtifactBuild build={build} />
                 </Grid>
               );
             })}
@@ -55,9 +39,5 @@ class ArtifactBuilds extends React.Component {
     );
   }
 }
-
-ArtifactBuilds.propTypes = {
-  onChange: PropTypes.func,
-};
 
 export default ArtifactBuilds;

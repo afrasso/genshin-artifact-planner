@@ -29,13 +29,11 @@ class ArtifactBuild extends React.Component {
     ]);
     this.updateIs4PieceDisabled(setRestrictions);
     this.setState({ setRestrictions });
-    this.reportChange();
   }
 
   addRestriction() {
     const restrictions = this.state.restrictions.concat([{ id: uuid() }]);
     this.setState({ restrictions });
-    this.reportChange();
   }
 
   onRemove(id) {
@@ -44,7 +42,6 @@ class ArtifactBuild extends React.Component {
       (restriction) => restriction.id !== id
     );
     this.setState({ restrictions });
-    this.reportChange();
   }
 
   onSetIs4PieceChange(id, is4Piece) {
@@ -55,7 +52,6 @@ class ArtifactBuild extends React.Component {
     setRestriction.is4Piece = is4Piece;
     this.updateIs4PieceDisabled(this.state.setRestrictions);
     this.setState({ restrictions: this.state.setRestrictions });
-    this.reportChange();
   }
 
   onSetRemove(restrictionId) {
@@ -65,7 +61,6 @@ class ArtifactBuild extends React.Component {
     );
     this.updateIs4PieceDisabled(setRestrictions);
     this.setState({ setRestrictions });
-    this.reportChange();
   }
 
   updateIs4PieceDisabled(restrictions) {
@@ -76,7 +71,6 @@ class ArtifactBuild extends React.Component {
       }
       restriction.is4PieceDisabled = is4PieceDisabled;
     });
-    this.reportChange();
   }
 
   isValid() {
@@ -96,25 +90,12 @@ class ArtifactBuild extends React.Component {
     return true;
   }
 
-  reportChange() {
-    if (this.isValid()) {
-      this.props.onChange({
-        character: this.state.character,
-        setRestrictions: this.state.setRestrictions,
-        restrictions: this.state.restrictions,
-      });
-    }
-  }
-
   render() {
     return (
       <Grid container>
         <Grid item xs={12}>
           <CharacterSelect
-            onChange={(e, option) => {
-              this.setState({ character: option });
-              this.reportChange();
-            }}
+            onChange={(e, option) => this.setState({ character: option })}
           />
         </Grid>
         <Grid item xs={12}>
@@ -139,7 +120,6 @@ class ArtifactBuild extends React.Component {
 
 ArtifactBuild.propTypes = {
   build: PropTypes.object,
-  onChange: PropTypes.func,
 };
 
 export default ArtifactBuild;

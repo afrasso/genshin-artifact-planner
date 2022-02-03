@@ -9,7 +9,7 @@ import ArtifactRestriction from "./ArtifactRestriction";
 function ArtifactRestrictions(props) {
   return (
     <Grid container>
-      {props.restrictions.length === 0 ? (
+      {_.isEmpty(props.restrictions) ? (
         <Grid item xs>
           <Typography
             sx={{

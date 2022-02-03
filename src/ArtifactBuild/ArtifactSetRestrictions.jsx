@@ -9,7 +9,7 @@ import ArtifactSetRestriction from "./ArtifactSetRestriction";
 function ArtifactSetRestrictions(props) {
   return (
     <Grid container>
-      {props.restrictions.length === 0 ? (
+      {_.isEmpty(props.setRestrictions) ? (
         <Grid item xs>
           <Typography
             sx={{
@@ -24,7 +24,7 @@ function ArtifactSetRestrictions(props) {
           </Typography>
         </Grid>
       ) : (
-        _.map(props.restrictions, (restriction) => {
+        _.map(props.setRestrictions, (restriction) => {
           return (
             <Grid item key={restriction.id} xs={12}>
               <ArtifactSetRestriction
@@ -32,16 +32,17 @@ function ArtifactSetRestrictions(props) {
                 is4Piece={restriction.is4Piece}
                 is4PieceDisabled={restriction.is4PieceDisabled}
                 onIs4PieceChange={props.onIs4PieceChange}
-                onRemove={props.onRemove}
+                onRemove={props.onSetRestrictionRemoval}
                 set={restriction.set}
               />
             </Grid>
           );
         })
       )}
-      {props.restrictions.length < 2 && (
+      {(_.isEmpty(props.setRestrictions) ||
+        props.setRestrictions.length < 2) && (
         <Grid item xs>
-          <IconButton onClick={props.addRestriction}>
+          <IconButton onClick={props.addSetRestriction}>
             <AddIcon />
           </IconButton>
         </Grid>
@@ -51,10 +52,10 @@ function ArtifactSetRestrictions(props) {
 }
 
 ArtifactSetRestrictions.propTypes = {
-  addRestriction: PropTypes.func,
+  addSetRestriction: PropTypes.func,
   onIs4PieceChange: PropTypes.func,
-  onRemove: PropTypes.func,
-  restrictions: PropTypes.array,
+  onSetRestrictionRemoval: PropTypes.func,
+  setRestrictions: PropTypes.array,
 };
 
 export default ArtifactSetRestrictions;

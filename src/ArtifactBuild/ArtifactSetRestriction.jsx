@@ -51,7 +51,9 @@ function ArtifactSetRestriction(props) {
         <Grid item>
           <Grid container>
             <Grid item>
-              <IconButton onClick={() => props.onRemove(props.id)}>
+              <IconButton
+                onClick={() => props.onSetRestrictionRemoval(props.id)}
+              >
                 <CloseIcon />
               </IconButton>
             </Grid>
@@ -67,7 +69,7 @@ ArtifactSetRestriction.propTypes = {
   is4Piece: PropTypes.bool,
   is4PieceDisabled: PropTypes.bool,
   onIs4PieceChange: PropTypes.func,
-  onRemove: PropTypes.func,
+  onSetRestrictionRemoval: PropTypes.func,
   set: PropTypes.string,
 };
 

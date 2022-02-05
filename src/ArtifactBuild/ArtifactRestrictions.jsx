@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { v4 as uuid } from "uuid";
 
 import PropTypes from "prop-types";
 import { Grid, IconButton, Typography } from "@mui/material";
@@ -7,9 +8,30 @@ import AddIcon from "@mui/icons-material/Add";
 import ArtifactRestriction from "./ArtifactRestriction";
 
 function ArtifactRestrictions(props) {
+  const onAdd = () => {
+    const restrictions = _.isNil(props.restrictions)
+      ? []
+      : _.cloneDeep(props.restrictions);
+    restrictions.push({ id: uuid() });
+    props.onChange(restrictions);
+  };
+
+  const onChange = (restriction) => {
+    const restrictions = _.cloneDeep(props.restrictions);
+    restrictions[_.findIndex(restrictions, (r) => r.id === restriction.id)] =
+      restriction;
+    props.onChange(restrictions);
+  };
+
+  const onRemove = (restriction) => {
+    const restrictions = _.cloneDeep(props.restrictions);
+    _.remove(restrictions, (r) => r.id === restriction.id);
+    props.onChange(restrictions);
+  };
+
   return (
     <Grid container>
-      {props.restrictions.length === 0 ? (
+      {_.isEmpty(props.restrictions) ? (
         <Grid item xs>
           <Typography
             sx={{
@@ -28,15 +50,16 @@ function ArtifactRestrictions(props) {
           return (
             <Grid item key={restriction.id} xs={12}>
               <ArtifactRestriction
-                id={restriction.id}
-                onRemove={props.onRemove}
+                onChange={onChange}
+                onRemove={onRemove}
+                restriction={restriction}
               />
             </Grid>
           );
         })
       )}
       <Grid item xs>
-        <IconButton onClick={props.addRestriction}>
+        <IconButton onClick={onAdd}>
           <AddIcon />
         </IconButton>
       </Grid>
@@ -45,8 +68,7 @@ function ArtifactRestrictions(props) {
 }
 
 ArtifactRestrictions.propTypes = {
-  addRestriction: PropTypes.func,
-  onRemove: PropTypes.func,
+  onChange: PropTypes.func,
   restrictions: PropTypes.array,
 };
 

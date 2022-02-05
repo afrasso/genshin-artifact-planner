@@ -10,12 +10,11 @@ function App() {
   return (
     <Grid>
       <ArtifactBuilds
-        onChange={(builds) => {
-          setBuilds(builds);
-        }}
+        builds={builds}
+        onChange={(builds) => setBuilds(builds)}
       />
       <Divider />
-      <SimulationResults builds={builds} />
+      <SimulationResults builds={[]} />
     </Grid>
   );
 }

@@ -1,10 +1,19 @@
-import { useState } from "react";
+import _ from "lodash";
+
 import PropTypes from "prop-types";
 import { Autocomplete, Box, Grid, TextField } from "@mui/material";
 
 function CharacterSelect(props) {
-  const [img, setImg] = useState("./img/Character_Unknown_Thumb.png");
-  const [backgroundImg, setBackgroundImg] = useState();
+  const character = _.isNil(props.character) ? null : props.character;
+  let img = "./img/Character_Unknown_Thumb.png";
+  let backgroundImg;
+  if (character === "Albedo") {
+    img = "./img/Character_Albedo_Thumb.png";
+    backgroundImg = "url(./img/Background_Item_5_Star.png)";
+  } else if (character === "Eula") {
+    img = "./img/Character_Eula_Thumb.png";
+    backgroundImg = "url(./img/Background_Item_5_Star.png)";
+  }
 
   return (
     <Grid container>
@@ -22,22 +31,11 @@ function CharacterSelect(props) {
       <Grid item xs>
         <Autocomplete
           options={["Albedo", "Eula"]}
-          renderInput={(params) => <TextField {...params} label="Character" />}
-          onChange={(e, option) => {
-            if (option === "Albedo") {
-              setImg("./img/Character_Albedo_Thumb.png");
-              setBackgroundImg("url(./img/Background_Item_5_Star.png)");
-            } else if (option === "Eula") {
-              setImg("./img/Character_Eula_Thumb.png");
-              setBackgroundImg("url(./img/Background_Item_5_Star.png)");
-            } else {
-              setImg("./img/Character_Unknown_Thumb.png");
-              setBackgroundImg();
-            }
-            if (props.onChange) {
-              props.onChange(e, option);
-            }
+          onChange={(e, value) => {
+            props.onChange(value);
           }}
+          renderInput={(params) => <TextField {...params} label="Character" />}
+          value={character}
         />
       </Grid>
     </Grid>
@@ -45,6 +43,7 @@ function CharacterSelect(props) {
 }
 
 CharacterSelect.propTypes = {
+  character: PropTypes.string,
   onChange: PropTypes.func,
 };
 

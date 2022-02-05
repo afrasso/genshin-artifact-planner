@@ -16,7 +16,7 @@ function ArtifactRestriction(props) {
         renderInput={(params) => <TextField {...params} label="Main Stat" />}
       />
       <Grid container justifyContent="flex-end">
-        <IconButton onClick={() => props.onRemove(props.id)}>
+        <IconButton onClick={() => props.onRemove(props.restriction)}>
           <CloseIcon />
         </IconButton>
       </Grid>
@@ -25,10 +25,9 @@ function ArtifactRestriction(props) {
 }
 
 ArtifactRestriction.propTypes = {
-  id: PropTypes.string,
-  mainStat: PropTypes.string,
+  onChange: PropTypes.func,
   onRemove: PropTypes.func,
-  type: PropTypes.string,
+  restriction: PropTypes.object,
 };
 
 export default ArtifactRestriction;

@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import PropTypes from "prop-types";
 import {
   Autocomplete,
@@ -12,22 +14,41 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 function ArtifactSetRestriction(props) {
+  const set = _.isNil(props.setRestriction.set)
+    ? null
+    : props.setRestriction.set;
+  let img = "./img/Character_Unknown_Thumb.png";
+  let backgroundImg;
+  if (set === "Husk of Opulent Dreams") {
+    img = "./img/Character_Albedo_Thumb.png";
+    backgroundImg = "url(./img/Background_Item_5_Star.png)";
+  } else if (set === "Pale Flame") {
+    img = "./img/Character_Eula_Thumb.png";
+    backgroundImg = "url(./img/Background_Item_5_Star.png)";
+  }
+
   return (
     <Grid container>
       <Grid container>
         <Grid item>
           <Box
             component="img"
-            src="./img/Character_Unknown_Thumb.png"
-            sx={{ width: 56, height: 56 }}
+            src={img}
+            sx={{ width: 56, height: 56, background: backgroundImg }}
           />
         </Grid>
         <Grid item xs>
           <Autocomplete
             options={["Husk of Opulent Dreams", "Pale Flame"]}
+            onChange={(e, value) => {
+              const setRestriction = _.cloneDeep(props.setRestriction);
+              setRestriction.set = value;
+              props.onChange(setRestriction);
+            }}
             renderInput={(params) => (
               <TextField {...params} label="Artifact Set" />
             )}
+            value={set}
           />
         </Grid>
       </Grid>
@@ -37,21 +58,24 @@ function ArtifactSetRestriction(props) {
             <FormControlLabel
               control={
                 <Switch
-                  checked={props.is4Piece}
-                  onChange={(event) =>
-                    props.onIs4PieceChange(props.id, event.target.checked)
-                  }
+                  checked={props.setRestriction.is4Piece}
+                  disabled={props.setRestriction.is4PieceDisabled}
+                  onChange={(event) => {
+                    const setRestriction = _.cloneDeep(props.setRestriction);
+                    setRestriction.is4Piece = event.target.checked;
+                    props.onChange(setRestriction);
+                  }}
                 />
               }
-              disabled={props.is4PieceDisabled}
-              label={props.is4Piece ? "4-Piece" : "2-Piece"}
+              disabled={props.setRestriction.is4PieceDisabled}
+              label={props.setRestriction.is4Piece ? "4-Piece" : "2-Piece"}
             />
           </FormGroup>
         </Grid>
         <Grid item>
           <Grid container>
             <Grid item>
-              <IconButton onClick={() => props.onRemove(props.id)}>
+              <IconButton onClick={() => props.onRemove(props.setRestriction)}>
                 <CloseIcon />
               </IconButton>
             </Grid>
@@ -63,12 +87,9 @@ function ArtifactSetRestriction(props) {
 }
 
 ArtifactSetRestriction.propTypes = {
-  id: PropTypes.string,
-  is4Piece: PropTypes.bool,
-  is4PieceDisabled: PropTypes.bool,
-  onIs4PieceChange: PropTypes.func,
+  onChange: PropTypes.func,
   onRemove: PropTypes.func,
-  set: PropTypes.string,
+  setRestriction: PropTypes.object,
 };
 
 export default ArtifactSetRestriction;

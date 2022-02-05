@@ -22,16 +22,18 @@ class SimulationResults extends React.Component {
   }
 
   generateRawData() {
-    const simulations = simulate({
-      builds: this.props.builds,
-      good: { artifacts: [] },
-      runs: 100,
-    });
-    const newData = _.map(
-      simulations,
-      (simulation) => simulation.totalResinSpent
-    );
-    this.setState({ rawData: this.state.rawData.concat(newData) });
+    if (!_.isEmpty(this.props.builds)) {
+      const simulations = simulate({
+        builds: this.props.builds,
+        good: { artifacts: [] },
+        runs: 100,
+      });
+      const newData = _.map(
+        simulations,
+        (simulation) => simulation.totalResinSpent
+      );
+      this.setState({ rawData: this.state.rawData.concat(newData) });
+    }
   }
 
   render() {

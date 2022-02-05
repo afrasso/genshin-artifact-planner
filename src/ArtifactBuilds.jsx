@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { v4 as uuid } from "uuid";
 
 import PropTypes from "prop-types";
 import { Button, Grid } from "@mui/material";
@@ -6,6 +7,24 @@ import { Button, Grid } from "@mui/material";
 import ArtifactBuild from "./ArtifactBuild/ArtifactBuild";
 
 function ArtifactBuilds(props) {
+  const onAdd = () => {
+    const builds = _.isNil(props.builds) ? [] : _.cloneDeep(props.builds);
+    builds.push({ id: uuid() });
+    props.onChange(builds);
+  };
+
+  const onChange = (build) => {
+    const builds = _.cloneDeep(props.builds);
+    builds[_.findIndex(builds, (b) => b.id === build.id)] = build;
+    props.onChange(builds);
+  };
+
+  const onRemove = (build) => {
+    const builds = _.cloneDeep(props.builds);
+    _.remove(builds, (b) => b.id === build.id);
+    props.onChange(builds);
+  };
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -14,25 +33,9 @@ function ArtifactBuilds(props) {
             return (
               <Grid item key={build.id} xs={12} sm={6} md={4} lg={3} xl={2}>
                 <ArtifactBuild
-                  addRestriction={() => props.addRestriction(build.id)}
-                  addSetRestriction={() => props.addSetRestriction(build.id)}
                   build={build}
-                  onCharacterChange={(character) =>
-                    props.onCharacterChange(build.id, character)
-                  }
-                  onRestrictionRemoval={(restrictionId) =>
-                    props.onRestrictionRemoval(build.id, restrictionId)
-                  }
-                  onSetIs4PieceChange={(setRestrictionId, is4Piece) =>
-                    props.onSetIs4PieceChange(
-                      build.id,
-                      setRestrictionId,
-                      is4Piece
-                    )
-                  }
-                  onSetRestrictionRemoval={(setRestrictionId) =>
-                    props.onSetRestrictionRemoval(build.Id, setRestrictionId)
-                  }
+                  onChange={onChange}
+                  onRemove={onRemove}
                 />
               </Grid>
             );
@@ -40,21 +43,15 @@ function ArtifactBuilds(props) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={props.addBuild}>Add Build</Button>
+        <Button onClick={onAdd}>Add Build</Button>
       </Grid>
     </Grid>
   );
 }
 
 ArtifactBuilds.propTypes = {
-  addBuild: PropTypes.func,
-  addRestriction: PropTypes.func,
-  addSetRestriction: PropTypes.func,
   builds: PropTypes.array,
-  onCharacterChange: PropTypes.func,
-  onRestrictionRemoval: PropTypes.func,
-  onSetIs4PieceChange: PropTypes.func,
-  onSetRestrictionRemoval: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default ArtifactBuilds;

@@ -1,13 +1,16 @@
+import _ from "lodash";
+
 import PropTypes from "prop-types";
 import { Autocomplete, Box, Grid, TextField } from "@mui/material";
 
 function CharacterSelect(props) {
+  const character = _.isNil(props.character) ? null : props.character;
   let img = "./img/Character_Unknown_Thumb.png";
   let backgroundImg;
-  if (props.character === "Albedo") {
+  if (character === "Albedo") {
     img = "./img/Character_Albedo_Thumb.png";
     backgroundImg = "url(./img/Background_Item_5_Star.png)";
-  } else if (props.character === "Eula") {
+  } else if (character === "Eula") {
     img = "./img/Character_Eula_Thumb.png";
     backgroundImg = "url(./img/Background_Item_5_Star.png)";
   }
@@ -27,14 +30,12 @@ function CharacterSelect(props) {
       </Grid>
       <Grid item xs>
         <Autocomplete
-          value={props.character}
           options={["Albedo", "Eula"]}
-          onChange={(e, option) => {
-            if (props.onChange) {
-              props.onChange(e, option);
-            }
+          onChange={(e, value) => {
+            props.onChange(value);
           }}
           renderInput={(params) => <TextField {...params} label="Character" />}
+          value={character}
         />
       </Grid>
     </Grid>

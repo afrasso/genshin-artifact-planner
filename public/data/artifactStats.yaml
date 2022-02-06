@@ -1,0 +1,66 @@
+main:
+  - label: Anemo DMG Bonus %
+    key: anemo_dmg_
+  - label: ATK
+    key: atk
+  - label: ATK %
+    key: atk_
+  - label: CRIT DMG %
+    key: critDMG_
+  - label: CRIT Rate %
+    key: critRate_
+  - label: Cryo DMG Bonus %
+    key: cryo_dmg_
+  - label: DEF %
+    key: def_
+  - label: Electro DMG Bonus %
+    key: electro_dmg_
+  - label: Elemental Mastery
+    key: eleMas
+  - label: Energy Recharge %
+    key: enerRech_
+  - label: Geo DMG Bonus %
+    key: geo_dmg_
+  - label: Healing Bonus %
+    key: heal_
+  - label: HP
+    key: hp
+  - label: HP %
+    key: hp_
+  - label: Hydro DMG Bonus %
+    key: hydro_dmg_
+  - label: Physical DMG Bonus %
+    key: physical_dmg_
+  - label: Pyro DMG Bonus %
+    key: pyro_dmg_
+sub:
+  - label: ATK
+    key: atk
+    max: 116.7
+  - label: ATK %
+    key: atk_
+    max: 34.98
+  - label: CRIT Rate %
+    key: critRate_
+    max: 23.34
+  - label: Crit DMG %
+    key: critDMG_
+    max: 46.62
+  - label: DEF
+    key: def
+    max: 138.9
+  - label: DEF %
+    key: def_
+    max: 43.74
+  - label: Elemental Mastery
+    key: eleMas
+    max: 139.86
+  - label: Energy Recharge %
+    key: enerRech_
+    max: 38.88
+  - label: HP
+    key: hp
+    max: 1792.5
+  - label: HP %
+    key: hp_
+    max: 34.98

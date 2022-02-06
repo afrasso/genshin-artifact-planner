@@ -6,18 +6,18 @@ import { Autocomplete, Box, Grid, TextField } from "@mui/material";
 
 import { StaticDataContext } from "../staticDataContext";
 
-function CharacterSelect(props) {
-  const characters = useContext(StaticDataContext).characters;
+function ArtifactSetSelect(props) {
+  const artifactSets = useContext(StaticDataContext).artifactSets;
 
-  let character, img, backgroundImg;
-  if (_.isNil(props.character)) {
-    character = null;
+  let artifactSet, img, backgroundImg;
+  if (_.isNil(props.artifactSet)) {
+    artifactSet = null;
     img = "./img/character_unknown_thumb.png";
   } else {
-    character = props.character;
-    img = `./img/character_${character.key}_thumb.png`;
+    artifactSet = props.artifactSet;
+    img = `./img/artifact_set_${artifactSet.key}_thumb.png`;
     backgroundImg =
-      character.stars === 5
+      artifactSet.maxStars === 5
         ? "url(./img/background_5_star.png)"
         : "url(./img/background_4_star.png)";
   }
@@ -43,18 +43,18 @@ function CharacterSelect(props) {
           onChange={(e, value) => {
             props.onChange(value);
           }}
-          options={characters}
-          renderInput={(params) => <TextField {...params} label="Character" />}
-          value={character}
+          options={artifactSets}
+          renderInput={(params) => <TextField {...params} label="Set" />}
+          value={artifactSet}
         />
       </Grid>
     </Grid>
   );
 }
 
-CharacterSelect.propTypes = {
-  character: PropTypes.object,
+ArtifactSetSelect.propTypes = {
+  artifactSet: PropTypes.object,
   onChange: PropTypes.func,
 };
 
-export default CharacterSelect;
+export default ArtifactSetSelect;

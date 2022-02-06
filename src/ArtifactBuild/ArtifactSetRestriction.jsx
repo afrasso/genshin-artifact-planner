@@ -2,55 +2,28 @@ import _ from "lodash";
 
 import PropTypes from "prop-types";
 import {
-  Autocomplete,
-  Box,
   FormControlLabel,
   FormGroup,
   Grid,
   IconButton,
   Switch,
-  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-function ArtifactSetRestriction(props) {
-  const set = _.isNil(props.setRestriction.set)
-    ? null
-    : props.setRestriction.set;
-  let img = "./img/Character_Unknown_Thumb.png";
-  let backgroundImg;
-  if (set === "Husk of Opulent Dreams") {
-    img = "./img/Character_Albedo_Thumb.png";
-    backgroundImg = "url(./img/Background_Item_5_Star.png)";
-  } else if (set === "Pale Flame") {
-    img = "./img/Character_Eula_Thumb.png";
-    backgroundImg = "url(./img/Background_Item_5_Star.png)";
-  }
+import ArtifactSetSelect from "./ArtifactSetSelect";
 
+function ArtifactSetRestriction(props) {
   return (
     <Grid container>
       <Grid container>
-        <Grid item>
-          <Box
-            component="img"
-            src={img}
-            sx={{ width: 56, height: 56, background: backgroundImg }}
-          />
-        </Grid>
-        <Grid item xs>
-          <Autocomplete
-            options={["Husk of Opulent Dreams", "Pale Flame"]}
-            onChange={(e, value) => {
-              const setRestriction = _.cloneDeep(props.setRestriction);
-              setRestriction.set = value;
-              props.onChange(setRestriction);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Artifact Set" />
-            )}
-            value={set}
-          />
-        </Grid>
+        <ArtifactSetSelect
+          onChange={(set) => {
+            const setRestriction = _.cloneDeep(props.setRestriction);
+            setRestriction.set = set;
+            props.onChange(setRestriction);
+          }}
+          artifactSet={props.setRestriction.set}
+        />
       </Grid>
       <Grid container justifyContent="space-between">
         <Grid item>

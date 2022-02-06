@@ -1,0 +1,40 @@
+- label: Flower of Life
+  key: flower
+  stats:
+    - hp
+- label: Plume of Death
+  key: plume
+  stats:
+    - atk
+- label: Sands of Eon
+  key: sands
+  stats:
+    - hp_
+    - atk_
+    - def_
+    - enerRech_
+    - eleMas
+- label: Goblet of Eonothem
+  key: goblet
+  stats:
+    - hp_
+    - atk_
+    - def_
+    - pyro_dmg_
+    - electro_dmg_
+    - cryo_dmg_
+    - hydro_dmg_
+    - anemo_dmg_
+    - geo_dmg_
+    - physical_dmg_
+    - eleMas
+- label: Circlet of Logos
+  key: circlet
+  stats:
+    - hp_
+    - atk_
+    - def_
+    - critRate_
+    - critDMG_
+    - heal_
+    - eleMas

@@ -1,22 +1,18 @@
-- label: Flower of Life
-  key: flower
-  stats:
+- key: flower
+  mainStatKeys:
     - hp
-- label: Plume of Death
-  key: plume
-  stats:
+- key: plume
+  mainStatKeys:
     - atk
-- label: Sands of Eon
-  key: sands
-  stats:
+- key: sands
+  mainStatKeys:
     - hp_
     - atk_
     - def_
     - enerRech_
     - eleMas
-- label: Goblet of Eonothem
-  key: goblet
-  stats:
+- key: goblet
+  mainStatKeys:
     - hp_
     - atk_
     - def_
@@ -28,9 +24,8 @@
     - geo_dmg_
     - physical_dmg_
     - eleMas
-- label: Circlet of Logos
-  key: circlet
-  stats:
+- key: circlet
+  mainStatKeys:
     - hp_
     - atk_
     - def_

@@ -1,25 +1,31 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
 
-import PropTypes from "prop-types";
 import { Button, Grid } from "@mui/material";
 
-import ArtifactBuild from "./ArtifactBuild/ArtifactBuild";
+import { BuildEntryData } from "./types";
 
-function ArtifactBuilds(props) {
+import ArtifactBuild from "./ArtifactBuild";
+
+interface Props {
+  builds: BuildEntryData[];
+  onChange: (builds: BuildEntryData[]) => void;
+}
+
+function ArtifactBuilds(props: Props) {
   const onAdd = () => {
     const builds = _.isNil(props.builds) ? [] : _.cloneDeep(props.builds);
-    builds.push({ id: uuid() });
+    builds.push({ id: uuid(), name: "", setsCriteria: [], slotsCriteria: [] });
     props.onChange(builds);
   };
 
-  const onChange = (build) => {
+  const onChange = (build: BuildEntryData) => {
     const builds = _.cloneDeep(props.builds);
     builds[_.findIndex(builds, (b) => b.id === build.id)] = build;
     props.onChange(builds);
   };
 
-  const onRemove = (build) => {
+  const onRemove = (build: BuildEntryData) => {
     const builds = _.cloneDeep(props.builds);
     _.remove(builds, (b) => b.id === build.id);
     props.onChange(builds);
@@ -48,10 +54,5 @@ function ArtifactBuilds(props) {
     </Grid>
   );
 }
-
-ArtifactBuilds.propTypes = {
-  builds: PropTypes.array,
-  onChange: PropTypes.func,
-};
 
 export default ArtifactBuilds;

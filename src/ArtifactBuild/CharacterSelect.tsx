@@ -1,23 +1,29 @@
 import _ from "lodash";
 
 import { useContext } from "react";
-import PropTypes from "prop-types";
 import { Autocomplete, Box, Grid, TextField } from "@mui/material";
+
+import { Character } from "../types";
 
 import { StaticDataContext } from "../staticDataContext";
 
-function ArtifactSetSelect(props) {
-  const artifactSets = useContext(StaticDataContext).artifactSets;
+interface Props {
+  character: Character;
+  onChange: (character: Character) => void;
+}
 
-  let artifactSet, img, backgroundImg;
-  if (_.isNil(props.artifactSet)) {
-    artifactSet = null;
+function CharacterSelect(props: Props) {
+  const characters = useContext(StaticDataContext).characters;
+
+  let character, img, backgroundImg;
+  if (_.isNil(props.character)) {
+    character = null;
     img = "./img/character_unknown_thumb.png";
   } else {
-    artifactSet = props.artifactSet;
-    img = `./img/artifact_set_${artifactSet.key}_thumb.png`;
+    character = props.character;
+    img = `./img/character_${character.key}_thumb.png`;
     backgroundImg =
-      artifactSet.maxStars === 5
+      character.rarity === 5
         ? "url(./img/background_5_star.png)"
         : "url(./img/background_4_star.png)";
   }
@@ -37,24 +43,20 @@ function ArtifactSetSelect(props) {
       </Grid>
       <Grid item xs>
         <Autocomplete
+          getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => {
             return option.key === value.key;
           }}
           onChange={(e, value) => {
             props.onChange(value);
           }}
-          options={artifactSets}
-          renderInput={(params) => <TextField {...params} label="Set" />}
-          value={artifactSet}
+          options={characters}
+          renderInput={(params) => <TextField {...params} label="Character" />}
+          value={character}
         />
       </Grid>
     </Grid>
   );
 }
 
-ArtifactSetSelect.propTypes = {
-  artifactSet: PropTypes.object,
-  onChange: PropTypes.func,
-};
-
-export default ArtifactSetSelect;
+export default CharacterSelect;

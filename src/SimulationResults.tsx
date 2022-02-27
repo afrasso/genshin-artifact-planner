@@ -13,6 +13,8 @@ import {
 
 import simulate, { Build, SimulationResult } from "genshin-artifact-simulator";
 
+import PercentileResults from "./PercentileResults";
+
 interface Props {
   builds: Build[];
 }
@@ -22,19 +24,28 @@ interface GraphDatum {
   y: number;
 }
 
-interface PercentileResult {
-  percentile: number;
-  resinSpent: number;
-}
-
 function SimulationResults(props: Props) {
   const [simulationResults, setSimulationResults] =
     useState<SimulationResult[]>();
-  const [graphData, setGraphData] = useState<GraphDatum[]>();
-  const [percentileResults, setPercentileResults] =
-    useState<PercentileResult[]>();
 
-  const getGraphData = (resinSpentArray: number[]) => {
+  const runSimulation = () => {
+    if (_.isEmpty(props.builds)) {
+      setSimulationResults([]);
+      return;
+    }
+    const simulationResults = simulate({
+      builds: props.builds,
+      goodData: { artifacts: [] },
+      runs: 100,
+    });
+    setSimulationResults(simulationResults);
+  };
+
+  const getGraphData = () => {
+    const resinSpentArray = _.map(
+      simulationResults,
+      (result) => result.totalResinSpent
+    );
     const maxResin = Math.max(...resinSpentArray);
     const graphData = _.times(maxResin / 20, (idx) => {
       const x = idx * 20;
@@ -50,47 +61,17 @@ function SimulationResults(props: Props) {
     return graphData;
   };
 
-  const runSimulation = () => {
-    if (_.isEmpty(props.builds)) {
-      setSimulationResults([]);
-      setGraphData([]);
-      setPercentileResults([]);
-      return;
-    }
-    const simulationResults = simulate({
-      builds: props.builds,
-      goodData: { artifacts: [] },
-      runs: 100,
-    });
-    const resinSpentArray = _.map(
-      simulationResults,
-      (result) => result.totalResinSpent
-    );
-    const graphData = getGraphData(resinSpentArray);
-
+  const getPercentileData = () => {
     const percentiles = [1, 5, 10, 25, 50, 75, 90, 95, 99];
     const resinSpentByPercentile = percentile(
       percentiles,
-      resinSpentArray
+      _.map(simulationResults, (result) => result.totalResinSpent)
     ) as number[];
-    const percentileResults = _.map(percentiles, (percentile, idx) => ({
+    const percentileData = _.map(percentiles, (percentile, idx) => ({
       percentile,
       resinSpent: resinSpentByPercentile[idx],
     }));
-
-    setSimulationResults(simulationResults);
-    setGraphData(graphData);
-    setPercentileResults(percentileResults);
-  };
-
-  const getPercentileString = (percentile: number): string => {
-    if (percentile % 10 === 1) {
-      return `${percentile}st`;
-    }
-    if (percentile % 10 === 2) {
-      return `${percentile}nd`;
-    }
-    return `${percentile}th`;
+    return percentileData;
   };
 
   return (
@@ -100,17 +81,13 @@ function SimulationResults(props: Props) {
         ""
       ) : (
         <Grid>
-          {_.times(percentileResults.length, (idx) => {
-            return (
-              <Typography key={idx}>{`${getPercentileString(
-                percentileResults[idx].percentile
-              )} percentile resin: ${
-                percentileResults[idx].resinSpent
-              }`}</Typography>
-            );
-          })}
+          <PercentileResults percentileData={getPercentileData()} />
           <VictoryChart>
-            <VictoryHistogram data={graphData} />
+            <VictoryHistogram
+              data={_.map(simulationResults, (result) => ({
+                x: result.totalResinSpent,
+              }))}
+            />
           </VictoryChart>
           <VictoryChart
             containerComponent={
@@ -125,7 +102,7 @@ function SimulationResults(props: Props) {
             theme={VictoryTheme.material}
             animate={{ duration: 1000 }}
           >
-            <VictoryLine interpolation="basis" data={graphData} />
+            <VictoryLine interpolation="basis" data={getGraphData()} />
           </VictoryChart>
         </Grid>
       )}
